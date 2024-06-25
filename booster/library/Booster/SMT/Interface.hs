@@ -173,10 +173,9 @@ getModelFor ctxt ps subst
     | Left errMsg <- translated = Log.withContext Log.CtxSMT $ do
         Log.logMessage $ "SMT translation error: " <> errMsg
         smtTranslateError errMsg
-    | Right (smtAsserts, transState) <- translated = Log.withContext Log.CtxSMT $ do
-        evalSMT ctxt . runExceptT $ do
-            lift $ hardResetSolver ctxt.options
-            solve smtAsserts transState
+    | Right (smtAsserts, transState) <- translated =
+          Log.withContext Log.CtxSMT . evalSMT ctxt $
+              runExceptT (solve smtAsserts transState) <* swapSmtOptions ctxt.options
   where
     solve ::
         [DeclareCommand] ->
@@ -332,10 +331,9 @@ checkPredicates ctxt givenPs givenSubst psToCheck
     | Left errMsg <- translated = Log.withContext Log.CtxSMT $ do
         Log.withContext Log.CtxAbort $ Log.logMessage $ "SMT translation error: " <> errMsg
         pure . Left . SMTTranslationError $ errMsg
-    | Right ((smtGiven, sexprsToCheck), transState) <- translated = Log.withContext Log.CtxSMT $ do
-        evalSMT ctxt . runExceptT $ do
-            lift $ hardResetSolver ctxt.options
-            solve smtGiven sexprsToCheck transState
+    | Right ((smtGiven, sexprsToCheck), transState) <- translated =
+        Log.withContext Log.CtxSMT . evalSMT ctxt $
+            runExceptT (solve smtGiven sexprsToCheck transState) <* swapSmtOptions ctxt.options
   where
     solve ::
         [DeclareCommand] ->
