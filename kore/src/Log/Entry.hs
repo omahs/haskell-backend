@@ -21,6 +21,7 @@ module Log.Entry (
     CLContext (..),
     IdContext (..),
     SimpleContext (..),
+    UniqueId (UNKNOWN),
     withId,
     withShortId,
     single,

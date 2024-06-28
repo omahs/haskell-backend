@@ -32,7 +32,7 @@ import Kore.Internal.Variable (
 import Kore.Rewrite.RewritingVariable
 import Kore.Unparser
 import Kore.Util (showHashHex)
-import Log
+import Log hiding (UniqueId)
 import Prelude.Kore
 import Pretty (
     Pretty (..),
@@ -72,23 +72,12 @@ instance Entry DebugAttemptedRewriteRules where
 
     oneLineContextDoc = \case
         DebugAttemptedRewriteRules{configuration, ruleId} ->
-            [ "term " <> (showHashHex $ hash configuration)
-            , "rewrite " <> shortRuleIdTxt ruleId
+            [ CtxTerm `withShortId` showHashHex (hash configuration)
+            , CtxRewrite `withId` fromMaybe "UNKNOWN" (getUniqueId ruleId)
             ]
-    oneLineContextJson
-        DebugAttemptedRewriteRules{configuration, ruleId} =
-            Array $
-                fromList
-                    [ object
-                        [ "term" .= showHashHex (hash configuration)
-                        ]
-                    , object
-                        [ "rewrite" .= shortRuleIdTxt ruleId
-                        ]
-                    ]
 
     oneLineDoc entry@(DebugAttemptedRewriteRules{configuration, label, ruleId, attemptedRewriteRule}) =
-        let context = map Pretty.brackets (pretty <$> oneLineContextDoc entry <> ["detail"])
+        let context = map Pretty.brackets (pretty . show <$> oneLineContextDoc entry <> single CtxDetail)
             logMsg =
                 ( Pretty.hsep . concat $
                     [ ["attempting to apply rewrite rule", Pretty.pretty (shortRuleIdTxt ruleId), Pretty.pretty label]
