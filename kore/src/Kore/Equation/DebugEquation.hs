@@ -455,11 +455,11 @@ instance Entry DebugApplyEquation where
 
     oneLineContextDoc (DebugApplyEquation equation result) =
         let equationKind = if isSimplification equation then CtxSimplification else CtxFunction
-        in [ equationKind `withId` ruleIdText equation
-           , CLNullary CtxSuccess
-           , CtxTerm `withShortId` showHashHex (hash result)
-           , CLNullary CtxKoreTerm
-           ]
+         in [ equationKind `withId` ruleIdText equation
+            , CLNullary CtxSuccess
+            , CtxTerm `withShortId` showHashHex (hash result)
+            , CLNullary CtxKoreTerm
+            ]
 
     oneLineJson (DebugApplyEquation _ _result) = JSON.Null -- JSON.toJSON result
 

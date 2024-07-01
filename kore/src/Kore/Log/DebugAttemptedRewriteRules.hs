@@ -12,10 +12,9 @@ module Kore.Log.DebugAttemptedRewriteRules (
     whileDebugAttemptRewriteRule,
 ) where
 
-import Data.Aeson (Value (Array), object, toJSON, (.=))
+import Data.Aeson (object, (.=))
 import Data.Text (Text)
 import Data.Text qualified as Text
-import Data.Vector (fromList)
 import Kore.Attribute.Axiom (
     SourceLocation,
     UniqueId (..),
@@ -88,7 +87,12 @@ instance Entry DebugAttemptedRewriteRules where
          in mconcat context <> logMsg
 
     oneLineJson DebugAttemptedRewriteRules{label, attemptedRewriteRule} =
-        toJSON $ renderDefault $ maybe (Pretty.pretty attemptedRewriteRule) Pretty.pretty label
+        -- add the "detail" context here (floated out in BoosterAdaptor)
+        object
+            [ "context" .= CtxDetail
+            , "message"
+                .= renderDefault (maybe (Pretty.pretty attemptedRewriteRule) Pretty.pretty label)
+            ]
 
 whileDebugAttemptRewriteRule ::
     MonadLog log =>

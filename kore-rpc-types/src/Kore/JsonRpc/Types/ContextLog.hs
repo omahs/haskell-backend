@@ -35,6 +35,7 @@ data SimpleContext
     | -- mode/phase
       CtxInternalise
     | CtxMatch
+    | CtxUnify
     | CtxDefinedness
     | CtxConstraint
     | CtxSMT
@@ -50,6 +51,7 @@ data SimpleContext
       CtxKoreTerm
     | CtxDetail
     | CtxSubstitution
+    | CtxRemainder
     | CtxDepth
     | CtxTiming
     | -- standard log levels

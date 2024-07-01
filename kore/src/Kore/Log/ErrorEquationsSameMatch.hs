@@ -28,8 +28,8 @@ import Kore.Internal.TermLike (
 import Log (
     Entry (..),
     Severity (Error),
-    SomeEntry (SomeEntry),
     SimpleContext (CtxError),
+    SomeEntry (SomeEntry),
     single,
  )
 import Prelude.Kore

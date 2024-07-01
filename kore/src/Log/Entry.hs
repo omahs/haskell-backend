@@ -117,18 +117,18 @@ prettySeverity :: Severity -> Pretty.Doc ann
 prettySeverity = Pretty.pretty . show
 
 severityToContext :: Severity -> CLContext
-severityToContext = CLNullary . \case
-    Debug -> CtxDetail
-    Info -> CtxInfo
-    Warning -> CtxWarn
-    Error -> CtxError
+severityToContext =
+    CLNullary . \case
+        Debug -> CtxDetail
+        Info -> CtxInfo
+        Warning -> CtxWarn
+        Error -> CtxError
 
 withId :: (UniqueId -> IdContext) -> Text -> CLContext
 c `withId` i = CLWithId $ c $ LongId i
 
 withShortId :: (UniqueId -> IdContext) -> Text -> CLContext
 c `withShortId` i = CLWithId $ c $ ShortId i
-
 
 single :: SimpleContext -> [CLContext]
 single c = [CLNullary c]

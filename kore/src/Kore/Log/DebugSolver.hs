@@ -23,10 +23,10 @@ import Data.Text (
 import Data.Text.Lazy qualified as Text.Lazy
 import Data.Text.Lazy.Builder qualified as Text.Lazy.Builder
 import Log (
-    SimpleContext (CtxSMT),
     Entry (..),
     LogAction (..),
     Severity (Debug),
+    SimpleContext (CtxSMT),
     SomeEntry (..),
     logWith,
     single,
