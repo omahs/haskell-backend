@@ -47,7 +47,7 @@ import Kore.Attribute.SourceLocation (
  )
 import Kore.Equation.Equation (Equation (..))
 import Kore.Internal.OrCondition (OrCondition)
-import Kore.Internal.Pattern (Conditional (..), Pattern)
+import Kore.Internal.Pattern (Conditional (..), Pattern, toTermLike)
 import Kore.Internal.Predicate (Predicate)
 import Kore.Internal.SideCondition (SideCondition)
 import Kore.Internal.TermLike (
@@ -461,7 +461,8 @@ instance Entry DebugApplyEquation where
             , CLNullary CtxKoreTerm
             ]
 
-    oneLineJson (DebugApplyEquation _ _result) = JSON.Null -- JSON.toJSON result
+    oneLineJson (DebugApplyEquation _ result) =
+        JSON.toJSON $ Kore.Syntax.Json.fromTermLike . getRewritingTerm $ toTermLike result
 
 {- | Log when an 'Equation' is actually applied.
 
